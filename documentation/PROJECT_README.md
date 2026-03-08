@@ -34,8 +34,8 @@ Jogo 3D em Godot 4.6+ para Android, aimed at a 3-year-old child.
 ### Fase 1: Setup + Estrutura Base
 - [x] Configurar Godot 4.6 (mobile renderer) ✓
 - [x] Criar pastas (scenes, scripts, etc.) ✓
-- [ ] Scene principal (Main)
-- [ ] Sistema de estados do carro (enum:montado, limpo, sujo, quebrado)
+- [x] Scene principal (Main)
+- [x] Sistema de estados do carro (enum:montado, limpo, sujo, quebrado)
 
 ### Fase 2: Sistema de Montagem
 - [ ] Modelo 3D placeholder do carro
