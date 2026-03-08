@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://engine_part"]
 
-[ext_resource type="Script" path="res://scripts/systems/draggable_part.gd" id="1_drag"]
+[ext_resource type="Script" path="res://scripts/systems/DraggablePart.gd" id="1_drag"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1"]
 size = Vector3(0.6, 0.4, 0.4)
@@ -10,9 +10,9 @@ size = Vector3(0.6, 0.4, 0.4)
 
 [node name="Engine" type="Area3D"]
 script = ExtResource("1_drag")
-part_name = "engine"
-target_position = Vector3(0.5, 0.7, 0)
-snap_distance = 1.2
+part_name = "Engine"
+snap_distance = 0.8
+return_to_start = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
