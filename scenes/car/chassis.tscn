@@ -8,7 +8,7 @@ size = Vector3(2, 0.5, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_1"]
 size = Vector3(2, 0.5, 1)
 
-[node name="Chassis" type="StaticBody3D"]
+[node name="Chassis" type="Area3D"]
 script = ExtResource("1_drag")
 part_name = "chassis"
 target_position = Vector3(0, 0.5, 0)
