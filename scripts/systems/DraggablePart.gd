@@ -181,13 +181,13 @@ func check_snap_proximity():
 			if target_snap_position != snap_point:
 				target_snap_position = snap_point
 				# Poderia adicionar partículas, som, etc
-				modulate = Color(0.5, 1.0, 0.5)  # Verde
+				get_node("MeshInstance3D").modulate = Color(0.5, 1.0, 0.5)  # Verde
 		else:
 			target_snap_position = null
-			modulate = Color.WHITE
+			get_node("MeshInstance3D").modulate = Color.WHITE
 	else:
 		target_snap_position = null
-		modulate = Color.WHITE
+		get_node("MeshInstance3D").modulate = Color.WHITE
 
 
 func snap_to_position(snap_point: Area3D):
@@ -207,7 +207,7 @@ func snap_to_position(snap_point: Area3D):
 	snap_point.set_meta("occupied", true)
 	
 	# Feedback visual de sucesso
-	modulate = Color(0.5, 1.0, 0.5)
+	get_node("MeshInstance3D").modulate = Color(0.5, 1.0, 0.5)
 
 
 func return_to_original_position():
