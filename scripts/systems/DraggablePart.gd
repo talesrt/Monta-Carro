@@ -1,7 +1,7 @@
 extends Area3D
-class_name DraggablePart
+# Script para peças do carro que podem ser arrastadas
+# Removi "class_name" para evitar conflitos
 
-## Script para peças do carro que podem ser arrastadas
 ## Use este script nas peças que a criança vai arrastar
 
 # Configurações

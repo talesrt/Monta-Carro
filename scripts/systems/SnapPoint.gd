@@ -1,7 +1,7 @@
 extends Area3D
-class_name SnapPoint
+# Pontos onde as peças devem ser encaixadas
+# Removi "class_name" para evitar conflitos
 
-## Pontos onde as peças devem ser encaixadas
 ## Coloque estes nodes onde cada peça do carro deve ir
 
 @export var part_type: String = "Roda"  ## Tipo de peça que aceita (deve corresponder ao part_name da peça)

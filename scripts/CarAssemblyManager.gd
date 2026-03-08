@@ -1,7 +1,7 @@
 extends Node3D
-class_name CarAssemblyManager
+# Gerenciador principal do jogo de montagem do carro
+# Removi "class_name" para evitar conflitos
 
-## Gerenciador principal do jogo de montagem do carro
 ## Coloque este script no node principal da cena
 
 # Configurações
@@ -48,9 +48,11 @@ func connect_draggable_parts():
 	var parts = get_tree().get_nodes_in_group("draggable_parts")
 	
 	for part in parts:
-		if part is DraggablePart:
+		if part.has_signal("part_snapped"):
 			part.part_snapped.connect(_on_part_snapped)
+		if part.has_signal("part_picked_up"):
 			part.part_picked_up.connect(_on_part_picked_up)
+		if part.has_signal("part_dropped"):
 			part.part_dropped.connect(_on_part_dropped)
 
 
@@ -59,7 +61,7 @@ func connect_snap_points():
 	var points = get_tree().get_nodes_in_group("snap_points")
 	
 	for point in points:
-		if point is SnapPoint:
+		if point.has_signal("part_placed"):
 			point.part_placed.connect(_on_snap_point_filled)
 
 
@@ -163,20 +165,23 @@ func reset_game():
 	# Resetar peças
 	var parts = get_tree().get_nodes_in_group("draggable_parts")
 	for part in parts:
-		if part is DraggablePart:
+		if part.has("is_snapped"):
 			part.is_snapped = false
+		if part.has("input_ray_pickable"):
 			part.input_ray_pickable = true
+		if part.has("original_position"):
 			part.global_position = part.original_position
-			part.modulate = Color.WHITE
+		part.modulate = Color.WHITE
 	
 	# Resetar pontos de encaixe
 	var points = get_tree().get_nodes_in_group("snap_points")
 	for point in points:
-		if point is SnapPoint:
+		if point.has("is_occupied"):
 			point.is_occupied = false
-			point.set_meta("occupied", false)
-			if point.outline_mesh:
-				point.outline_mesh.visible = true
+		point.set_meta("occupied", false)
+		if point.has("outline_mesh") and point.outline_mesh:
+			point.outline_mesh.visible = true
+			if point.has("outline_color"):
 				point.outline_mesh.modulate = point.outline_color
 	
 	# Atualizar UI
