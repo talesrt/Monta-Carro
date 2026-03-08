@@ -1,0 +1,86 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/CarAssemblyManager_FIXED.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/DraggablePart_FIXED.gd" id="2"]
+[ext_resource type="Script" path="res://scripts/SnapPoint_FIXED.gd" id="3"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_1"]
+radius = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_1"]
+radius = 0.35
+
+[sub_resource type="BoxMesh" id="BoxMesh_1"]
+size = Vector3(0.8, 0.8, 0.8)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2"]
+radius = 0.1
+
+[node name="Main" type="Node3D"]
+
+[node name="CarAssemblyManager" type="Node3D" parent="."]
+script = ExtResource("1")
+required_parts = Array[String](["Roda_FL", "Roda_FR"])
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.866025, 0.5, 0, -0.5, 0.866025, 0, 5, 10)
+fov = 70.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.707107, 0.707107, 0, -0.707107, 0.707107, 0, 5, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+
+[node name="Parts" type="Node3D" parent="."]
+
+[node name="Wheel_FL" type="Area3D" parent="Parts" groups=["draggable_parts"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 1, 0)
+script = ExtResource("2")
+part_name = "Roda_FL"
+snap_distance = 0.8
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Parts/Wheel_FL"]
+mesh = SubResource("SphereMesh_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Parts/Wheel_FL"]
+shape = SubResource("SphereShape3D_1")
+
+[node name="Wheel_FR" type="Area3D" parent="Parts" groups=["draggable_parts"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 1, 0)
+script = ExtResource("2")
+part_name = "Roda_FR"
+snap_distance = 0.8
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Parts/Wheel_FR"]
+mesh = SubResource("SphereMesh_1")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Parts/Wheel_FR"]
+shape = SubResource("SphereShape3D_1")
+
+[node name="SnapPoints" type="Node3D" parent="."]
+
+[node name="WheelSnap_FL" type="Area3D" parent="SnapPoints" groups=["snap_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.3, 2)
+script = ExtResource("3")
+part_type = "Roda_FL"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SnapPoints/WheelSnap_FL"]
+shape = SubResource("SphereShape3D_2")
+
+[node name="WheelSnap_FR" type="Area3D" parent="SnapPoints" groups=["snap_points"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.3, 2)
+script = ExtResource("3")
+part_type = "Roda_FR"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="SnapPoints/WheelSnap_FR"]
+shape = SubResource("SphereShape3D_2")
+
+[node name="CarBase" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+mesh = SubResource("BoxMesh_1")
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+text = "Arraste as rodas para os pontos amarelos!"
+font_size = 32
