@@ -11,8 +11,7 @@ top_radius = 0.4
 bottom_radius = 0.4
 height = 0.3
 
-[node name="Wheel" type="RigidBody3D"]
-mass = 2.0
+[node name="Wheel" type="Area3D"]
 script = ExtResource("1_drag")
 part_name = "wheel"
 target_position = Vector3(0, 0, 0)
