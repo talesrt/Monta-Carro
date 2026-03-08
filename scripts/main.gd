@@ -78,6 +78,12 @@ func _on_assembly_progress(placed: int, total: int) -> void:
 	if ui.has_node("StatusLabel"):
 		ui.get_node("StatusLabel").text = "Peças: %d/%d" % [placed, total]
 
+func _on_assembly_complete() -> void:
+	print("[Game] Montagem completa!")
+	car_state_manager.complete_assembly()
+	if ui.has_node("InstructionLabel"):
+		ui.get_node("InstructionLabel").text = "Carro Montado! Hora de lavar."
+
 func _on_needs_maintenance(type: String) -> void:
 	print("[Game] Precisa de manutenção: ", type)
 	# Notificar UI
