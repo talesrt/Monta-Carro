@@ -1,0 +1,10 @@
+config_version=5
+
+[application]
+config/name="Monta-Carro"
+config/features=PackedStringArray("4.6")
+config/icon="res://assets/icon.svg"
+
+[rendering]
+renderer/rendering_method="mobile"
+
