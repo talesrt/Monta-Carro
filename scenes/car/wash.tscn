@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://wash_scene"]
+
+[ext_resource type="Script" path="res://scripts/systems/wash_system.gd" id="1_wash"]
+
+[node name="WashSystem" type="Node3D"]
+script = ExtResource("1_wash")
+wash_speed = 20.0
+
+[node name="WashArea" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WashArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = null
+
+[node name="Sponge" type="MeshInstance3D" parent="."]
+visible = false
+mesh = null
