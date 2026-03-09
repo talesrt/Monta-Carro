@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://wheel_part"]
 
-[ext_resource type="Script" path="res://scripts/systems/DraggablePart.gd" id="1_drag"]
+[ext_resource type="Script" path="res://scripts/systems/draggable_part.gd" id="1_drag"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_1"]
 height = 0.3
@@ -11,11 +11,11 @@ top_radius = 0.4
 bottom_radius = 0.4
 height = 0.3
 
-[node name="Wheel" type="Area3D"]
+[node name="Wheel" type="StaticBody3D"]
 script = ExtResource("1_drag")
 part_name = "Wheel"
-snap_distance = 0.8
-return_to_start = true
+target_position = Vector3(0.7, 0.3, 0)
+snap_distance = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
