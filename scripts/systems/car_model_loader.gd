@@ -2,6 +2,7 @@ extends Node3D
 class_name CarModelLoader
 
 ## Carrega o modelo GLB e detecta sockets para snap
+## Desabilita física automática
 
 @export var model_path: String = "res://assets/models/Car_1.glb"
 @export var auto_load: bool = true
@@ -22,9 +23,28 @@ func load_model() -> void:
 		add_child(loaded_model)
 		print("[CarModel] Modelo instanciado: ", loaded_model.name)
 		
+		# Desabilitar física de todos os nós
+		_disable_physics(loaded_model)
+		
 		_find_sockets(loaded_model)
 	else:
 		print("[CarModel] ERRO: Não conseguiu carregar modelo")
+
+func _disable_physics(node: Node) -> void:
+	# Desabilitar RigidBody
+	if node is RigidBody3D:
+		node.freeze = true
+		node.freeze_mode = RigidBody3D.FREEZE_MODE_STATIC
+		print("[CarModel] RigidBody3D desabilitado: ", node.name)
+	
+	# Desabilitar CollisionShape3D
+	if node is CollisionShape3D:
+		node.disabled = true
+		print("[CarModel] CollisionShape3D desabilitado: ", node.name)
+	
+	# Procura recursivamente
+	for child in node.get_children():
+		_disable_physics(child)
 
 func _find_sockets(node: Node) -> void:
 	for child in node.get_children():
