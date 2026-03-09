@@ -15,7 +15,7 @@ height = 0.3
 script = ExtResource("1_drag")
 part_name = "Wheel"
 target_position = Vector3(0.7, 0.3, 0)
-snap_distance = 1.0
+snap_distance = 3.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
