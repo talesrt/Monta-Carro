@@ -14,6 +14,7 @@ height = 0.3
 [node name="Wheel" type="StaticBody3D"]
 script = ExtResource("1_drag")
 part_name = "Wheel"
+socket_name = "socket_wheel"
 target_position = Vector3(0.7, 0.3, 0)
 snap_distance = 3.0
 

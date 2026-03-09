@@ -11,6 +11,7 @@ size = Vector3(2, 0.5, 1)
 [node name="Chassis" type="StaticBody3D"]
 script = ExtResource("1_drag")
 part_name = "Chassis"
+socket_name = "socket_frame"
 target_position = Vector3(0, 0.5, 0)
 snap_distance = 3.0
 

@@ -1,7 +1,7 @@
 extends StaticBody3D
 class_name DraggablePart
 
-## Sistema de drag & drop - usando raycast manual
+## Sistema de drag & drop - integração com sockets do modelo GLB
 
 signal placed_correctly
 signal picked_up
@@ -10,6 +10,7 @@ signal dropped
 @export var target_position: Vector3 = Vector3.ZERO
 @export var snap_distance: float = 3.0
 @export var part_name: String = "part"
+@export var socket_name: String = ""  # Nome do socket no GLB (ex: "socket_frame")
 
 var is_placed: bool = false
 var is_dragging: bool = false
@@ -17,9 +18,27 @@ var original_position: Vector3
 
 func _ready() -> void:
 	original_position = global_position
+	
+	# Se socket_name está definido, procurar posição automaticamente
+	if socket_name != "":
+		_find_socket_position()
+	
 	print("[Part] ", part_name, " ready at ", original_position)
 	print("[Part] ", part_name, " target_position = ", target_position)
-	print("[Part] ", part_name, " snap_distance = ", snap_distance)
+
+func _find_socket_position() -> void:
+	# Procurar o socket no modelo pai
+	var parent = get_parent()
+	while parent:
+		# Procurar socket nos filhos
+		if parent.has_node(socket_name):
+			var socket = parent.get_node(socket_name)
+			target_position = socket.global_position
+			print("[Part] ", part_name, " encontrou socket ", socket_name, " em ", target_position)
+			return
+		parent = parent.get_parent()
+	
+	print("[Part] ", part_name, " socket não encontrado: ", socket_name)
 
 func _process(delta: float) -> void:
 	# Sempre verificar clique do mouse
@@ -33,7 +52,6 @@ func _check_click() -> void:
 	if not camera:
 		return
 	
-	# Raycast do mouse para ver se clicou nesta peça
 	var from = camera.project_ray_origin(mouse_pos)
 	var to = from + camera.project_ray_normal(mouse_pos) * 1000
 	
@@ -49,7 +67,6 @@ func _check_click() -> void:
 		start_drag()
 	
 	elif is_dragging:
-		# Se está arrastando e clicou em outro lugar, soltar
 		end_drag()
 
 func _physics_process(delta: float) -> void:
@@ -67,7 +84,6 @@ func _physics_process(delta: float) -> void:
 				global_position = new_pos
 
 func _input(event: InputEvent) -> void:
-	# Soltar quando soltar o botão
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed and is_dragging:
 			end_drag()
@@ -89,14 +105,12 @@ func end_drag() -> void:
 	
 	var distance = global_position.distance_to(target_position)
 	print("[Part] ", part_name, " Dropped! Distance: ", distance)
-	print("[Part] ", part_name, " Target is at: ", target_position)
 	
 	if distance <= snap_distance:
 		global_position = target_position
 		is_placed = true
-		print("[Part] ", part_name, " PLACED CORRECTLY! Emitting signal...")
+		print("[Part] ", part_name, " PLACED CORRECTLY!")
 		placed_correctly.emit()
-		print("[Part] ", part_name, " Signal emitted!")
 	else:
 		global_position = original_position
 		print("[Part] ", part_name, " Returned to start")

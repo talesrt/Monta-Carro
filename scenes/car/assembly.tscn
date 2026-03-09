@@ -1,33 +1,40 @@
-[gd_scene load_steps=7 format=3 uid="uid://assembly_scene"]
+[gd_scene load_steps=8 format=3 uid="uid://assembly_scene"]
 
 [ext_resource type="Script" path="res://scripts/systems/assembly_system.gd" id="1_asm"]
 [ext_resource type="PackedScene" uid="uid://chassis_part" path="res://scenes/car/chassis.tscn" id="2_chassis"]
 [ext_resource type="PackedScene" uid="uid://wheel_part" path="res://scenes/car/wheel.tscn" id="3_wheel"]
 [ext_resource type="PackedScene" uid="uid://engine_part" path="res://scenes/car/engine.tscn" id="4_engine"]
+[ext_resource type="PackedScene" uid="uid://car_model" path="res://assets/models/Car_1.glb" id="5_car"]
 
 [node name="AssemblySystem" type="Node3D"]
 script = ExtResource("1_asm")
 parts_container = NodePath("PartsContainer")
+
+[node name="CarModel" parent="." instance=ExtResource("5_car")]
 
 [node name="PartsContainer" type="Node3D" parent="."]
 
 [node name="Chassis" parent="PartsContainer" instance=ExtResource("2_chassis")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0.5, 0)
 
-[node name="WheelFront" parent="PartsContainer" instance=ExtResource("3_wheel")]
+[node name="WheelFL" parent="PartsContainer" instance=ExtResource("3_wheel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.3, 0)
-target_position = Vector3(0.7, 0.3, 0)
+socket_name = "socket_wheel_FL"
 
-[node name="WheelBack" parent="PartsContainer" instance=ExtResource("3_wheel")]
+[node name="WheelFR" parent="PartsContainer" instance=ExtResource("3_wheel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.2, 0.3, 0)
+socket_name = "socket_wheel_FR"
+
+[node name="WheelRL" parent="PartsContainer" instance=ExtResource("3_wheel")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.3, 0)
-target_position = Vector3(-0.7, 0.3, 0)
+socket_name = "socket_wheel_RL"
+
+[node name="WheelRR" parent="PartsContainer" instance=ExtResource("3_wheel")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 0.3, 0)
+socket_name = "socket_wheel_RR"
 
 [node name="Engine" parent="PartsContainer" instance=ExtResource("4_engine")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.5, 0)
 
 [node name="TargetMarkers" type="Node3D" parent="."]
 visible = false
-
-[node name="TargetChassis" type="Marker3D" parent="TargetMarkers"]
-
-[node name="TargetEngine" type="Marker3D" parent="TargetMarkers"]
