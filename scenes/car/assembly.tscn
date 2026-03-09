@@ -1,16 +1,15 @@
-[gd_scene load_steps=8 format=3 uid="uid://assembly_scene"]
+[gd_scene load_steps=7 format=3 uid="uid://assembly_scene"]
 
 [ext_resource type="Script" path="res://scripts/systems/assembly_system.gd" id="1_asm"]
 [ext_resource type="PackedScene" uid="uid://chassis_part" path="res://scenes/car/chassis.tscn" id="2_chassis"]
 [ext_resource type="PackedScene" uid="uid://wheel_part" path="res://scenes/car/wheel.tscn" id="3_wheel"]
 [ext_resource type="PackedScene" uid="uid://engine_part" path="res://scenes/car/engine.tscn" id="4_engine"]
-[ext_resource type="PackedScene" uid="uid://car_model" path="res://assets/models/Car_1.glb" id="5_car"]
 
 [node name="AssemblySystem" type="Node3D"]
 script = ExtResource("1_asm")
 parts_container = NodePath("PartsContainer")
-
-[node name="CarModel" parent="." instance=ExtResource("5_car")]
+model_path = "res://assets/models/Car_1.glb"
+auto_load_model = true
 
 [node name="PartsContainer" type="Node3D" parent="."]
 
