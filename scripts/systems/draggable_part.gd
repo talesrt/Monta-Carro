@@ -1,16 +1,15 @@
 extends Area3D
 class_name DraggablePart
 
-## Uma peça do carro que pode ser arrastada com mouse
+## Sistema simples de drag & drop para 3D
 
 signal placed_correctly
 signal picked_up
 signal dropped
 
 @export var target_position: Vector3 = Vector3.ZERO
-@export var snap_distance: float = 1.5
+@export var snap_distance: float = 1.0
 @export var part_name: String = "part"
-@export var mesh_instance: MeshInstance3D
 
 var is_placed: bool = false
 var is_dragging: bool = false
@@ -19,11 +18,12 @@ var camera: Camera3D
 
 func _ready() -> void:
 	original_position = global_position
-	mouse_entered.connect(_on_mouse_entered)
-	mouse_exited.connect(_on_mouse_exited)
+	# Garantir que input_ray_pickable está habilitado
+	input_ray_pickable = true
 	print("[Part] ", part_name, " ready at ", original_position)
 
 func _input_event(_viewport, event, _position, _normal, _shape_idx):
+	# Este método é chamado quando o mouse clica no objeto
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
@@ -32,24 +32,29 @@ func _input_event(_viewport, event, _position, _normal, _shape_idx):
 				end_drag()
 
 func _process(_delta):
-	# Mover com mouse enquanto arrasta
+	# Mover objeto com mouse enquanto arrasta
 	if is_dragging and camera:
 		var mouse_pos = get_viewport().get_mouse_position()
 		var from = camera.project_ray_origin(mouse_pos)
 		var dir = camera.project_ray_normal(mouse_pos)
 		
-		# Criar plano na altura do objeto
+		# Criar plano horizontal na altura do objeto
 		var plane = Plane(Vector3.UP, original_position.y)
-		var intersect = plane.intersects_ray(from, dir)
+		var new_pos = plane.intersects_ray(from, dir)
 		
-		if intersect:
-			global_position = intersect
+		if new_pos:
+			global_position = new_pos
 
 func start_drag():
 	if is_placed:
 		return
 	
+	# Pegar a câmera principal
 	camera = get_viewport().get_camera_3d()
+	if not camera:
+		print("[Part] ERROR: No camera found!")
+		return
+	
 	is_dragging = true
 	picked_up.emit()
 	print("[Part] ", part_name, " started dragging")
@@ -60,27 +65,21 @@ func end_drag():
 	
 	is_dragging = false
 	
-	# Verificar se está perto da posição correta
+	# Verificar se está perto da posição de snap
 	var distance = global_position.distance_to(target_position)
+	print("[Part] ", part_name, " dropped at distance ", distance, " from target (snap: ", snap_distance, ")")
 	
 	if distance <= snap_distance:
+		# Snap para posição correta
 		global_position = target_position
 		is_placed = true
 		placed_correctly.emit()
-		print("[Part] ", part_name, " placed correctly!")
+		print("[Part] ", part_name, " PLACED CORRECTLY!")
 	else:
+		# Voltar para posição original
 		global_position = original_position
 	
 	dropped.emit()
-
-func _on_mouse_entered():
-	# Highlight quando mouse está sobre a peça
-	if mesh_instance and mesh_instance.get_surface_override_material(0) == null:
-		# Poderia adicionar highlight aqui
-		pass
-
-func _on_mouse_exited():
-	pass
 
 func reset():
 	global_position = original_position
