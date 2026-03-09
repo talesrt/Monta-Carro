@@ -14,25 +14,42 @@ var parts: Array[DraggablePart] = []
 var placed_count: int = 0
 
 func _ready() -> void:
-	# Encontrar todas as peças automaticamente
-	# Se parts_container está definido, procurar nele
-	# Senão, procurar nos filhos deste nó
-	var container = parts_container
-	if not container:
-		container = self  # Usar este nó se não há parts_container
+	# Procurar peças
+	_find_parts()
+	print("[Assembly] Sistema de montagem pronto. Peças: ", parts.size())
+
+func _find_parts() -> void:
+	var container: Node
 	
-	print("[Assembly] Procurando peças em: ", container.name)
+	# Se parts_container está definido, usar ele
+	if parts_container:
+		container = parts_container
+		print("[Assembly] Usando parts_container definido: ", container.name)
+	else:
+		# Se não, procurar PartsContainer como filho
+		container = get_node_or_null("PartsContainer")
+		if container:
+			print("[Assembly] PartsContainer encontrado automaticamente")
+		else:
+			# Se não encontrar, usar este nó
+			container = self
+			print("[Assembly] Usando self como container")
 	
-	for child in container.get_children():
-		print("[Assembly] Checking child: ", child.name, " type: ", typeof(child))
+	if container:
+		# Procurar peças nos filhos (e netos)
+		_find_parts_in_node(container)
+
+func _find_parts_in_node(node: Node) -> void:
+	for child in node.get_children():
 		if child is DraggablePart:
 			parts.append(child)
 			# Conectar sinal diretamente aqui para garantir
 			if not child.placed_correctly.is_connected(_on_part_placed):
 				child.placed_correctly.connect(_on_part_placed)
-			print("[Assembly] Encontrada e conectada peça: ", child.part_name)
-	
-	print("[Assembly] Sistema de montagem pronto. Peças: ", parts.size())
+			print("[Assembly] Encontrada peça: ", child.part_name)
+		# Procurar nos netos também (recursivo)
+		if child.get_child_count() > 0:
+			_find_parts_in_node(child)
 
 func get_total_parts() -> int:
 	return parts.size()
