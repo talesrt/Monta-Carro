@@ -1,7 +1,7 @@
 extends StaticBody3D
 class_name DraggablePart
 
-## Sistema de drag & drop - versão final com debug
+## Sistema de drag & drop - usando raycast manual
 
 signal placed_correctly
 signal picked_up
@@ -17,29 +17,40 @@ var original_position: Vector3
 
 func _ready() -> void:
 	original_position = global_position
-	
-	# CONFIGURAÇÃO CRÍTICA PARA DETECTAR CLIQUE!
-	input_ray_pickable = true
-	
 	print("[Part] ", part_name, " ready at ", original_position)
-	print("[Part] ", part_name, " input_ray_pickable = ", input_ray_pickable)
-
-# ESTE É O MÉTODO CORRETO PARA DETECTAR CLIQUE EM 3D!
-func _input_event(camera: Camera3D, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	print("[Part] ", part_name, " _input_event called!")
-	
-	if event is InputEventMouseButton:
-		print("[Part] ", part_name, " MouseButton: button_index=", event.button_index, " pressed=", event.pressed)
-		
-		if event.button_index == MOUSE_BUTTON_LEFT:
-			if event.pressed:
-				print("[Part] ", part_name, " CLICK DETECTADO - Starting drag")
-				_start_drag(camera)
-			else:
-				print("[Part] ", part_name, " RELEASE - Ending drag")
-				_end_drag()
 
 func _process(delta: float) -> void:
+	# Sempre verificar clique do mouse
+	if Input.is_action_just_pressed("ui_click"):
+		_check_click()
+
+func _check_click() -> void:
+	var mouse_pos = get_viewport().get_mouse_position()
+	var camera = get_viewport().get_camera_3d()
+	
+	if not camera:
+		return
+	
+	# Raycast do mouse para ver se clicou nesta peça
+	var from = camera.project_ray_origin(mouse_pos)
+	var to = from + camera.project_ray_normal(mouse_pos) * 1000
+	
+	var space = get_world_3d().direct_space_state
+	var query = PhysicsRayQueryParameters3D.create(from, to)
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
+	
+	var result = space.intersect_ray(query)
+	
+	if result and result.collider == self:
+		print("[Part] ", part_name, " CLICKED!")
+		start_drag()
+	
+	elif is_dragging:
+		# Se está arrastando e clicou em outro lugar, soltar
+		end_drag()
+
+func _physics_process(delta: float) -> void:
 	if is_dragging:
 		var mouse_pos = get_viewport().get_mouse_position()
 		var camera = get_viewport().get_camera_3d()
@@ -53,23 +64,22 @@ func _process(delta: float) -> void:
 			if new_pos:
 				global_position = new_pos
 
-func _start_drag(camera: Camera3D) -> void:
+func _input(event: InputEvent) -> void:
+	# Soltar quando soltar o botão
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_LEFT and not event.pressed and is_dragging:
+			end_drag()
+
+func start_drag() -> void:
 	if is_placed:
 		print("[Part] ", part_name, " Already placed!")
 		return
 	
-	if not camera:
-		camera = get_viewport().get_camera_3d()
-	
-	if not camera:
-		print("[Part] ", part_name, " ERROR: No camera found!")
-		return
-	
-	print("[Part] ", part_name, " Drag STARTED")
+	print("[Part] ", part_name, " Drag started!")
 	is_dragging = true
 	picked_up.emit()
 
-func _end_drag() -> void:
+func end_drag() -> void:
 	if not is_dragging:
 		return
 	
