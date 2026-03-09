@@ -1,7 +1,7 @@
 extends Area3D
 class_name DraggablePart
 
-## Sistema simples de drag & drop para 3D
+## Sistema de drag & drop debugado
 
 signal placed_correctly
 signal picked_up
@@ -15,49 +15,59 @@ var is_placed: bool = false
 var is_dragging: bool = false
 var original_position: Vector3
 var camera: Camera3D
+var dragging_object: Node3D = null
 
 func _ready() -> void:
 	original_position = global_position
-	# Garantir que input_ray_pickable está habilitado
 	input_ray_pickable = true
 	print("[Part] ", part_name, " ready at ", original_position)
 
 func _input_event(_viewport, event, _position, _normal, _shape_idx):
-	# Este método é chamado quando o mouse clica no objeto
+	print("[Part] ", part_name, " INPUT EVENT: ", event)
 	if event is InputEventMouseButton:
+		print("[Part] ", part_name, " Mouse button: pressed=", event.pressed, " button_index=", event.button_index)
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
+				print("[Part] ", part_name, " Starting drag...")
 				start_drag()
 			else:
+				print("[Part] ", part_name, " Ending drag...")
 				end_drag()
 
-func _process(_delta):
-	# Mover objeto com mouse enquanto arrasta
-	if is_dragging and camera:
-		var mouse_pos = get_viewport().get_mouse_position()
-		var from = camera.project_ray_origin(mouse_pos)
-		var dir = camera.project_ray_normal(mouse_pos)
-		
-		# Criar plano horizontal na altura do objeto
-		var plane = Plane(Vector3.UP, original_position.y)
-		var new_pos = plane.intersects_ray(from, dir)
-		
-		if new_pos:
-			global_position = new_pos
+func _input(event):
+	# Usar input global como backup
+	if event is InputEventMouseMotion and is_dragging:
+		process_drag(event.position)
 
 func start_drag():
 	if is_placed:
+		print("[Part] ", part_name, " Already placed!")
 		return
 	
-	# Pegar a câmera principal
 	camera = get_viewport().get_camera_3d()
 	if not camera:
-		print("[Part] ERROR: No camera found!")
-		return
+		# Tentar encontrar camera de outra forma
+		camera = get_tree().get_first_node_in_group("main_camera") as Camera3D
+		if not camera:
+			print("[Part] ", part_name, " ERROR: No camera found!")
+			return
 	
+	print("[Part] ", part_name, " Camera found: ", camera.name)
 	is_dragging = true
 	picked_up.emit()
-	print("[Part] ", part_name, " started dragging")
+
+func process_drag(mouse_pos: Vector2):
+	if not camera:
+		return
+	
+	var from = camera.project_ray_origin(mouse_pos)
+	var dir = camera.project_ray_normal(mouse_pos)
+	var plane = Plane(Vector3.UP, original_position.y)
+	var new_pos = plane.intersects_ray(from, dir)
+	
+	if new_pos:
+		global_position = new_pos
+		#print("[Part] ", part_name, " Pos: ", new_pos)
 
 func end_drag():
 	if not is_dragging:
@@ -65,19 +75,17 @@ func end_drag():
 	
 	is_dragging = false
 	
-	# Verificar se está perto da posição de snap
 	var distance = global_position.distance_to(target_position)
-	print("[Part] ", part_name, " dropped at distance ", distance, " from target (snap: ", snap_distance, ")")
+	print("[Part] ", part_name, " Dropped! Distance to target: ", distance)
 	
 	if distance <= snap_distance:
-		# Snap para posição correta
 		global_position = target_position
 		is_placed = true
 		placed_correctly.emit()
-		print("[Part] ", part_name, " PLACED CORRECTLY!")
+		print("[Part] ", part_name, " PLACED!")
 	else:
-		# Voltar para posição original
 		global_position = original_position
+		print("[Part] ", part_name, " Returned to start")
 	
 	dropped.emit()
 
