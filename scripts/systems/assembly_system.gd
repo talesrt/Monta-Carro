@@ -15,11 +15,19 @@ var placed_count: int = 0
 
 func _ready() -> void:
 	# Encontrar todas as peças automaticamente
-	if parts_container:
-		for child in parts_container.get_children():
-			if child is DraggablePart:
-				parts.append(child)
-				child.placed_correctly.connect(_on_part_placed)
+	# Se parts_container está definido, procurar nele
+	# Senão, procurar nos filhos deste nó
+	var container = parts_container
+	if not container:
+		container = self  # Usar este nó se não há parts_container
+	
+	print("[Assembly] Procurando peças em: ", container.name)
+	
+	for child in container.get_children():
+		if child is DraggablePart:
+			parts.append(child)
+			child.placed_correctly.connect(_on_part_placed)
+			print("[Assembly] Encontrada peça: ", child.part_name)
 	
 	print("[Assembly] Sistema de montagem pronto. Peças: ", parts.size())
 
