@@ -8,7 +8,7 @@ signal picked_up
 signal dropped
 
 @export var target_position: Vector3 = Vector3.ZERO
-@export var snap_distance: float = 1.0
+@export var snap_distance: float = 3.0
 @export var part_name: String = "part"
 
 var is_placed: bool = false
@@ -18,6 +18,8 @@ var original_position: Vector3
 func _ready() -> void:
 	original_position = global_position
 	print("[Part] ", part_name, " ready at ", original_position)
+	print("[Part] ", part_name, " target_position = ", target_position)
+	print("[Part] ", part_name, " snap_distance = ", snap_distance)
 
 func _process(delta: float) -> void:
 	# Sempre verificar clique do mouse
@@ -87,12 +89,14 @@ func end_drag() -> void:
 	
 	var distance = global_position.distance_to(target_position)
 	print("[Part] ", part_name, " Dropped! Distance: ", distance)
+	print("[Part] ", part_name, " Target is at: ", target_position)
 	
 	if distance <= snap_distance:
 		global_position = target_position
 		is_placed = true
+		print("[Part] ", part_name, " PLACED CORRECTLY! Emitting signal...")
 		placed_correctly.emit()
-		print("[Part] ", part_name, " PLACED CORRECTLY!")
+		print("[Part] ", part_name, " Signal emitted!")
 	else:
 		global_position = original_position
 		print("[Part] ", part_name, " Returned to start")

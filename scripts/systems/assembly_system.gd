@@ -24,10 +24,13 @@ func _ready() -> void:
 	print("[Assembly] Procurando peças em: ", container.name)
 	
 	for child in container.get_children():
+		print("[Assembly] Checking child: ", child.name, " type: ", typeof(child))
 		if child is DraggablePart:
 			parts.append(child)
-			child.placed_correctly.connect(_on_part_placed)
-			print("[Assembly] Encontrada peça: ", child.part_name)
+			# Conectar sinal diretamente aqui para garantir
+			if not child.placed_correctly.is_connected(_on_part_placed):
+				child.placed_correctly.connect(_on_part_placed)
+			print("[Assembly] Encontrada e conectada peça: ", child.part_name)
 	
 	print("[Assembly] Sistema de montagem pronto. Peças: ", parts.size())
 
@@ -41,10 +44,14 @@ func is_complete() -> bool:
 	return placed_count >= parts.size()
 
 func _on_part_placed() -> void:
+	print("[Assembly] _on_part_placed chamado!")
 	placed_count += 1
-	var part = get_signal_source()
-	if part:
-		part_placed.emit(part.part_name)
+	
+	# Encontrar qual peça disparou
+	for part in parts:
+		if part.is_placed:
+			print("[Assembly] Peça disparou: ", part.part_name)
+			part_placed.emit(part.part_name)
 	
 	progress_changed.emit(placed_count, parts.size())
 	
@@ -52,15 +59,9 @@ func _on_part_placed() -> void:
 	
 	# Verificar se todas as peças estão no lugar
 	if is_complete():
-		print("[Assembly] Montagem completa!")
+		print("[Assembly] Montagem COMPLETA! Emitindo sinal...")
 		assembly_complete.emit()
-
-func get_signal_source() -> DraggablePart:
-	# Retorna a peça que disparou o sinal (solução alternativa)
-	for part in parts:
-		if part.is_placed:
-			return part
-	return null
+		print("[Assembly] Sinal assembly_complete.emit() enviado!")
 
 func reset_assembly() -> void:
 	placed_count = 0
