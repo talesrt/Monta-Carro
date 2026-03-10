@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://dmmq11qv8cy4o"]
 
 [ext_resource type="PackedScene" uid="uid://dn3argd8s8hxx" path="res://assets/source meshs/Car_1.glb" id="1_xqchm"]
+[ext_resource type="Script" uid="uid://dutnl6g2cnna4" path="res://scripts/systems/SnapPoint.gd" id="2_jsb3l"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_th107"]
 
@@ -46,12 +47,14 @@ size = Vector3(1.0712891, 1.626831, 0.47717285)
 
 [node name="socket_wheel_FL" parent="socket_frame/car_frame" parent_id_path=PackedInt32Array(372897802) index="3" unique_id=1507016868]
 visible = false
+script = ExtResource("2_jsb3l")
 
 [node name="car_wheel_FL" type="MeshInstance3D" parent="socket_frame/car_frame/socket_wheel_FL" index="0" unique_id=1120443592]
 mesh = SubResource("ArrayMesh_06gp1")
 
 [node name="socket_wheel_FR" parent="socket_frame/car_frame" parent_id_path=PackedInt32Array(372897802) index="4" unique_id=693184513]
 visible = false
+script = ExtResource("2_jsb3l")
 
 [node name="car_wheel_FR" type="MeshInstance3D" parent="socket_frame/car_frame/socket_wheel_FR/socket_wheel_FR" parent_id_path=PackedInt32Array(1007007508) index="0" unique_id=1023931676]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.2)
@@ -59,9 +62,11 @@ mesh = SubResource("ArrayMesh_06gp1")
 
 [node name="socket_wheel_RL" parent="socket_frame/car_frame" parent_id_path=PackedInt32Array(372897802) index="5" unique_id=236189512]
 visible = false
+script = ExtResource("2_jsb3l")
 
 [node name="socket_wheel_RR" parent="socket_frame/car_frame" parent_id_path=PackedInt32Array(372897802) index="6" unique_id=1847662486]
 visible = false
+script = ExtResource("2_jsb3l")
 
 [node name="car_wheel_RR" type="MeshInstance3D" parent="socket_frame/car_frame/socket_wheel_RR" index="1" unique_id=492445130]
 mesh = SubResource("ArrayMesh_06gp1")
