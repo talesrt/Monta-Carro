@@ -1,8 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://main_scene"]
+[gd_scene format=3 uid="uid://das5c77fs23uk"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
-[ext_resource type="Script" path="res://scripts/car/car_state.gd" id="2_state"]
-[ext_resource type="PackedScene" uid="uid://assembly_scene" path="res://scenes/car/assembly.tscn" id="3_assembly"]
+[ext_resource type="Script" uid="uid://d2khiny1fn6p8" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://diddqb45l77yu" path="res://scripts/car/car_state.gd" id="2_state"]
+[ext_resource type="PackedScene" uid="uid://bwm6o6xbwgrwd" path="res://scenes/car/assembly.tscn" id="3_assembly"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(20, 1, 20)
@@ -10,35 +10,36 @@ size = Vector3(20, 1, 20)
 [sub_resource type="BoxMesh" id="BoxMesh_floor"]
 size = Vector3(20, 1, 20)
 
-[node name="Main" type="Node3D"]
+[node name="Main" type="Node3D" unique_id=1026723452]
 script = ExtResource("1_main")
 
-[node name="CarStateManager" type="Node" parent="."]
+[node name="CarStateManager" type="Node" parent="." unique_id=1331083765]
 script = ExtResource("2_state")
 
-[node name="AssemblySystem" parent="." instance=ExtResource("3_assembly")]
+[node name="AssemblySystem" parent="." unique_id=551517601 instance=ExtResource("3_assembly")]
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 8)
+[node name="Camera3D" type="Camera3D" parent="." unique_id=835773415]
+transform = Transform3D(0.8757849, -0.23919533, 0.41926897, 0, 0.86858827, 0.4955345, -0.48270166, -0.43398163, 0.7606964, 2.9697604, 2.489035, 3.2195296)
 current = true
+fov = 60.5
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1827578792]
 transform = Transform3D(0.866025, -0.25, 0.433013, 0, 0.866025, 0.5, -0.5, -0.433013, 0.75, 0, 10, 0)
 shadow_enabled = true
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1695002108]
 
-[node name="Floor" type="StaticBody3D" parent="."]
+[node name="Floor" type="StaticBody3D" parent="." unique_id=575751273]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor" unique_id=340385938]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 shape = SubResource("BoxShape3D_floor")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Floor" unique_id=744227013]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4162087, 0)
 mesh = SubResource("BoxMesh_floor")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=2066891714]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -46,7 +47,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="UI"]
+[node name="Label" type="Label" parent="UI" unique_id=805294387]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -59,7 +60,7 @@ grow_horizontal = 2
 text = "Monta-Carro"
 horizontal_alignment = 1
 
-[node name="StatusLabel" type="Label" parent="UI"]
+[node name="StatusLabel" type="Label" parent="UI" unique_id=979417805]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -72,9 +73,9 @@ grow_horizontal = 2
 text = "Estado: Montar"
 horizontal_alignment = 1
 
-[node name="InstructionLabel" type="Label" parent="UI"]
+[node name="InstructionLabel" type="Label" parent="UI" unique_id=121485427]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
