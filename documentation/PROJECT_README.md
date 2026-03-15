@@ -157,6 +157,38 @@ git pull
 
 ---
 
+## 📓 Agent Log (IMPORTANTE)
+
+Esta pasta **DEVE** ter um arquivo de log do agente (`AGENT_LOG.md` ou similar) onde o agente registra:
+- Decisões de design tomadas
+- Ações executadas
+- Problemas encontrados
+- Próximos passos
+
+Isso garante continuidade quando o agente reinicia.
+
+**Formato sugerido:**
+```markdown
+# Agent Log - [DATA]
+
+## Decisões
+- [Decisão 1]
+- [Decisão 2]
+
+## Ações Realizadas
+- [Ação 1]
+- [Ação 2]
+
+## Problemas
+- [Problema 1]
+
+## Próximos Passos
+- [Próximo passo 1]
+- [Próximo passo 2]
+```
+
+---
+
 ## ⚠️ Notas Importantes
 
 1. **Nunca fazer push de assets 3D grandes** - só código e placeholders

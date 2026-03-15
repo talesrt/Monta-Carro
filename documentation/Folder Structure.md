@@ -1,28 +1,50 @@
-seu_jogo/
-│
+# 📁 Folder Structure - Monta-Carro
+
+```
+Monta-Carro/
 ├── scenes/
-│   ├── levels/           # Suas fases/níveis
-│   ├── characters/       # Personagens (jogador, NPCs, inimigos)
-│   ├── ui/              # Interface do usuário (menus, HUD)
-│   └── props/           # Objetos do cenário
-│
+│   ├── main.tscn              # Cena principal
+│   ├── car/
+│   │   ├── assembly.tscn     # Cena de montagem
+│   │   ├── assembly_v2.tscn  # Cena v2 (com modelo GLB)
+│   │   ├── chassis.tscn       # Chassis
+│   │   ├── wheel.tscn         # Roda
+│   │   └── engine.tscn        # Motor
+│   ├── ui/
+│   └── levels/
 ├── scripts/
-│   ├── player/          # Scripts do jogador
-│   ├── enemies/         # Scripts de inimigos
-│   ├── managers/        # GameManager, ScoreManager, etc.
-│   └── utils/           # Scripts utilitários
-│
+│   ├── main.gd
+│   ├── car/
+│   │   ├── car_controller.gd
+│   │   └── car_state.gd
+│   └── systems/
+│       ├── assembly_system.gd
+│       ├── draggable_part.gd
+│       ├── snap_point.gd
+│       └── ...
 ├── assets/
-│   ├── models/          # Modelos 3D (.obj, .fbx, .gltf)
-│   ├── textures/        # Texturas e materiais
-│   ├── audio/
-│   │   ├── music/
-│   │   └── sfx/
-│   └── fonts/
-│
-├── resources/
-│   ├── materials/       # Arquivos .material
-│   ├── shaders/         # Shaders customizados
-│   └── themes/          # Temas de UI
-│
-└── addons/              # Plugins do Godot
+│   ├── models/
+│   │   └── car_1.glb         # Modelo 3D do carro
+│   └── textures/
+└── documentation/
+    ├── PROJECT_README.md       # Documentação principal
+    ├── Agent Instructions.md  # Instruções de design
+    ├── AGENT_LOG.md           # 📓 LOG DO AGENTE (sempre atualizar!)
+    └── Folder Structure.md    # Este arquivo
+```
+
+---
+
+## 📓 AGENT LOG
+
+**SEMPRE atualize o `AGENT_LOG.md`** quando:
+- Tomar uma decisão de design
+- Completar uma fase/tarefa
+- Encontrar um problema
+- Mudar de contexto (ex: parar de trabalhar e voltar depois)
+
+Isso garante continuidade quando o agente reinicia.
+
+---
+
+*Última atualização: 2026-03-10*
