@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://assembly_scene_v2"]
 
-[ext_resource type="Script" path="res://scripts/systems/assembly_system.gd" id="1_asm"]
+[ext_resource type="Script" path="res://scripts/systems/assembly_system_v2.gd" id="1_asm"]
 [ext_resource type="PackedScene" uid="uid://car_1_model" path="res://assets/models/car_1.tscn" id="2_car"]
+[ext_resource type="Script" path="res://scripts/systems/DraggablePart.gd" id="3_drag"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_placeholder"]
 albedo_color = Color(0.8, 0.2, 0.2, 1)
@@ -25,7 +26,7 @@ size = Vector3(0.8, 0.5, 0.6)
 script = ExtResource("1_asm")
 parts_container = NodePath("PartsContainer")
 model_path = "res://assets/models/car_1.tscn"
-auto_load_model = false
+auto_load_model = true
 
 [node name="CarModel" parent="." instance=ExtResource("2_car")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
@@ -33,12 +34,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 [node name="PartsContainer" type="Node3D" parent="."]
 
 # ============================================
-# DRAGGABLE PARTS (Placeholders para iniciar)
+# DRAGGABLE PARTS (com DraggablePart.gd)
 # ============================================
 
 # Roda Frente Esquerda
-[node name="WheelFL" type="Area3D" parent="PartsContainer"]
+[node name="WheelFL" type="Area3D" parent="PartsContainer" groups="draggable_parts"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.5, 1.2)
+script = ExtResource("3_drag")
+part_name = "wheel_FL"
+snap_distance = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PartsContainer/WheelFL"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
@@ -50,8 +54,11 @@ mesh = SubResource("CylinderMesh_wheel")
 surface_material_override/0 = SubResource("StandardMaterial3D_placeholder")
 
 # Roda Frente Direita
-[node name="WheelFR" type="Area3D" parent="PartsContainer"]
+[node name="WheelFR" type="Area3D" parent="PartsContainer" groups="draggable_parts"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0.5, -1.2)
+script = ExtResource("3_drag")
+part_name = "wheel_FR"
+snap_distance = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PartsContainer/WheelFR"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
@@ -63,8 +70,11 @@ mesh = SubResource("CylinderMesh_wheel")
 surface_material_override/0 = SubResource("StandardMaterial3D_placeholder")
 
 # Roda Trás Esquerda
-[node name="WheelRL" type="Area3D" parent="PartsContainer"]
+[node name="WheelRL" type="Area3D" parent="PartsContainer" groups="draggable_parts"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.5, 1.2)
+script = ExtResource("3_drag")
+part_name = "wheel_RL"
+snap_distance = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PartsContainer/WheelRL"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
@@ -76,8 +86,11 @@ mesh = SubResource("CylinderMesh_wheel")
 surface_material_override/0 = SubResource("StandardMaterial3D_placeholder")
 
 # Roda Trás Direita
-[node name="WheelRR" type="Area3D" parent="PartsContainer"]
+[node name="WheelRR" type="Area3D" parent="PartsContainer" groups="draggable_parts"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0.5, -1.2)
+script = ExtResource("3_drag")
+part_name = "wheel_RR"
+snap_distance = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PartsContainer/WheelRR"]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0, 0)
@@ -89,8 +102,11 @@ mesh = SubResource("CylinderMesh_wheel")
 surface_material_override/0 = SubResource("StandardMaterial3D_placeholder")
 
 # Motor (Engine)
-[node name="Engine" type="Area3D" parent="PartsContainer"]
+[node name="Engine" type="Area3D" parent="PartsContainer" groups="draggable_parts"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+script = ExtResource("3_drag")
+part_name = "engine"
+snap_distance = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="PartsContainer/Engine"]
 shape = SubResource("BoxShape3D_engine")
@@ -98,6 +114,3 @@ shape = SubResource("BoxShape3D_engine")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="PartsContainer/Engine"]
 mesh = SubResource("BoxMesh_engine")
 surface_material_override/0 = SubResource("StandardMaterial3D_placeholder")
-
-[node name="TargetMarkers" type="Node3D" parent="."]
-visible = false

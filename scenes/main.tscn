@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://d2khiny1fn6p8" path="res://scripts/main.gd" id="1_main"]
 [ext_resource type="Script" uid="uid://diddqb45l77yu" path="res://scripts/car/car_state.gd" id="2_state"]
-[ext_resource type="PackedScene" uid="uid://bwm6o6xbwgrwd" path="res://scenes/car/assembly.tscn" id="3_assembly"]
+[ext_resource type="PackedScene" uid="uid://assembly_scene_v2" path="res://scenes/car/assembly_v2.tscn" id="3_assembly"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
 size = Vector3(20, 1, 20)
@@ -39,7 +39,7 @@ shape = SubResource("BoxShape3D_floor")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.4162087, 0)
 mesh = SubResource("BoxMesh_floor")
 
-[node name="UI" type="Control" parent="." unique_id=2066891714]
+[node name="UI" type="Control" parent="." unique_id=2066891714"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
