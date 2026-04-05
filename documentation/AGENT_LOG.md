@@ -4,6 +4,27 @@
 
 ---
 
+## [2026-04-04]
+
+### Decisões
+- Opção B: finalizar e limpar assembly_system_v2.gd como sistema principal
+- Snap detection usa group-based approach: DraggablePart procura `snap_points` group
+- DraggablePart.gd reescrito do zero para Godot 4 (Area3D, proper signals)
+
+### Ações Realizadas
+- assembly_system_v2.gd: simplificado, auto_load_model=true, usa grupos
+- DraggablePart.gd: reescrito, usa group lookup para sockets, highlight verde, snap distance 1.0m
+- assembly_v2.tscn: script trocado de assembly_system.gd (v1) para v2, DraggablePart em cada Area3D, auto_load_model=true
+- main.tscn: referência atualizada de assembly.tscn para assembly_v2.tscn
+- game_manager.gd: wired para AssemblySystem v2, has_method() guards
+
+### Status Atual
+- Assembly: PRONTO PARA TESTAR (5 peças - 4 rodas + motor)
+- Car_1.glb sockets: socket_wheel_FL, socket_wheel_FR, socket_wheel_RL, socket_wheel_RR (já configurados no GLB)
+- Próximo: testar no Godot, depois Fase 3 (Lavagem)
+
+---
+
 ## [2026-03-10]
 
 ### Decisões Tomadas
